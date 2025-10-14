@@ -27,3 +27,23 @@ dist-ssr
 .env
 .env.local
 .env.production
+
+# AWS & Deployment
+*.zip
+*.pem
+*.key
+*.p12
+*.pfx
+.aws/
+aws-exports.js
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
