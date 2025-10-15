@@ -82,8 +82,6 @@ hri_3.0/
 ├── index.html                  # HTML template
 ├── package.json                # Dependencies
 ├── vite.config.js              # Vite configuration
-├── deploy-to-s3.sh             # Deployment script
-├── cloudformation-template.yaml # AWS infrastructure
 └── README.md                   # This file
 ```
 
@@ -137,89 +135,38 @@ const topics = [
 - **Component styles:** `src/App.css`
 - **Color scheme:** CSS variables in `:root` selector
 
-## 🚀 Deployment to AWS
+## 🚀 Deployment
 
-### Option 1: Automated Deployment Script
-
-1. **Make the script executable:**
-   ```bash
-   chmod +x deploy-to-s3.sh
-   ```
-
-2. **Update the script with your CloudFront Distribution ID** (optional):
-   Edit `deploy-to-s3.sh` and set `CLOUDFRONT_DISTRIBUTION_ID`
-
-3. **Run the deployment:**
-   ```bash
-   ./deploy-to-s3.sh
-   ```
-
-### Option 2: Manual Deployment
+### Build for Production
 
 1. **Build the project:**
    ```bash
    npm run build
    ```
 
-2. **Upload to S3:**
-   ```bash
-   aws s3 sync dist/ s3://www.humanriskintel.com/ --region us-east-2
-   ```
+2. **Deploy the `dist/` folder to your hosting provider**
 
-3. **Invalidate CloudFront cache:**
-   ```bash
-   aws cloudfront create-invalidation \
-     --distribution-id YOUR_DISTRIBUTION_ID \
-     --paths "/*"
-   ```
+The app can be deployed to any static hosting service such as:
+- AWS S3 + CloudFront
+- Netlify
+- Vercel
+- GitHub Pages
+- Any other static hosting provider
 
-### Option 3: CloudFormation Stack
+## 🔧 Infrastructure
 
-Deploy the complete infrastructure using CloudFormation:
+The application is a static React web app that can be hosted on any static hosting service. It connects to a backend API for news aggregation.
 
-```bash
-aws cloudformation create-stack \
-  --stack-name hri-v3-infrastructure \
-  --template-body file://cloudformation-template.yaml \
-  --parameters ParameterKey=DomainName,ParameterValue=www.humanriskintel.com \
-  --capabilities CAPABILITY_IAM
-```
-
-## 🔧 AWS Infrastructure
-
-The application uses the following AWS services:
+### Recommended AWS Services
 
 - **S3** - Static website hosting
 - **CloudFront** - CDN for global distribution
-- **ACM** - SSL/TLS certificates
-- **Route 53** or **Cloudflare** - DNS management
 - **API Gateway** - Backend API endpoint
 - **Lambda** - News aggregation function
 
-### S3 Bucket Configuration
-
-- **Bucket Name:** `www.humanriskintel.com`
-- **Region:** `us-east-2`
-- **Website Hosting:** Enabled
-- **Public Access:** Enabled for website hosting
-
-### CloudFront Configuration
-
-- **Origin:** S3 bucket
-- **SSL Certificate:** ACM certificate
-- **Price Class:** PriceClass_100 (US, Canada, Europe)
-- **HTTP Version:** HTTP/2
-- **Compression:** Enabled
-
 ## 🔌 Backend API
 
-The app connects to a Lambda function that aggregates news from multiple sources:
-
-- **Endpoint:** `https://e1suks3vz6.execute-api.us-east-2.amazonaws.com/prod/news`
-- **Lambda Function:** `hri-news-aggregator`
-- **Version:** 2.0.0
-- **Runtime:** Node.js 18.x
-- **Dependencies:** `rss-parser@^3.13.0`
+The app connects to a backend API that aggregates news from multiple sources. Configure your API endpoint in the Settings panel or via the `VITE_API_ENDPOINT` environment variable.
 
 ### News Sources
 
@@ -264,16 +211,9 @@ npm install
 
 ### Deployment Issues
 
-```bash
-# Verify AWS credentials
-aws sts get-caller-identity
-
-# Check S3 bucket exists
-aws s3 ls s3://www.humanriskintel.com/
-
-# Test CloudFront distribution
-curl -I https://www.humanriskintel.com
-```
+- Verify your hosting provider's deployment settings
+- Ensure the build completed successfully
+- Check that all environment variables are set correctly
 
 ## 📝 Version History
 

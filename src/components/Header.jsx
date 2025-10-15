@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Shield, Settings, Menu, X } from 'lucide-react'
+import { Settings, Menu, X } from 'lucide-react'
 
 function Header({ onSettingsClick }) {
   const [scrolled, setScrolled] = useState(false)
@@ -21,12 +21,21 @@ function Header({ onSettingsClick }) {
     }
   }
 
+  const goToHome = () => {
+    // If on a share page, navigate to home
+    if (window.location.search.includes('share=')) {
+      window.location.href = '/'
+    } else {
+      scrollToSection('hero')
+    }
+  }
+
   return (
     <header className={`header ${scrolled ? 'scrolled' : ''}`}>
       <div className="container">
         <div className="header-content">
-          <div className="logo" onClick={() => scrollToSection('hero')}>
-            <Shield className="logo-icon" />
+          <div className="logo" onClick={goToHome}>
+            <img src="/hri-icon.svg" alt="HRI Logo" className="logo-icon" />
             <span className="logo-text">
               <span className="logo-main">Human Risk Intelligence</span>
               <span className="logo-version">v3.0</span>

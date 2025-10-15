@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { ExternalLink, Calendar, Tag, AlertCircle, CheckCircle } from 'lucide-react'
 import ArticleSkeletonGrid from './ArticleSkeleton'
+import ShareButton from './ShareButton'
 
-function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead }) {
+function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead, onShare }) {
   const [visibleArticles, setVisibleArticles] = useState(20)
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef(null)
@@ -161,11 +162,14 @@ function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead }) {
                           {formatDate(article.pubDate)}
                         </span>
                       )}
-                      {isRead && (
-                        <span className="read-indicator" title="Read">
-                          <CheckCircle size={16} />
-                        </span>
-                      )}
+                      <div className="article-header-actions">
+                        {isRead && (
+                          <span className="read-indicator" title="Read">
+                            <CheckCircle size={16} />
+                          </span>
+                        )}
+                        {onShare && <ShareButton article={article} onShare={onShare} />}
+                      </div>
                     </div>
 
                     <h3 className="article-title">

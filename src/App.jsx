@@ -8,6 +8,8 @@ import NewsFeed from './components/NewsFeed'
 import Settings from './components/Settings'
 import Footer from './components/Footer'
 import ErrorBoundary from './components/ErrorBoundary'
+import ShareModal from './components/ShareModal'
+import ShareView from './components/ShareView'
 import './App.css'
 
 // Topic keywords for enhanced filtering
@@ -42,10 +44,24 @@ function App() {
     'securityweek', 'therecord', 'arstechnica', 'wired', 'reddit'
   ])
   const [apiEndpoint, setApiEndpoint] = useState(
-    'https://e1suks3vz6.execute-api.us-east-2.amazonaws.com/prod/news'
+    import.meta.env.VITE_API_ENDPOINT || ''
   )
   const [showSettings, setShowSettings] = useState(false)
   const [lastRefresh, setLastRefresh] = useState(null)
+  const [shareArticle, setShareArticle] = useState(null)
+  const [shareData, setShareData] = useState(null)
+  const [viewMode, setViewMode] = useState('normal') // 'normal' or 'share'
+
+  // Check for share parameter in URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const shareParam = urlParams.get('share')
+    
+    if (shareParam) {
+      setShareData(shareParam)
+      setViewMode('share')
+    }
+  }, [])
 
   // Load cached data and preferences
   useEffect(() => {
@@ -257,6 +273,31 @@ function App() {
 
   const filteredArticles = processedArticles()
 
+  const handleShare = (article) => {
+    setShareArticle(article)
+  }
+
+  const handleCloseShare = () => {
+    setShareArticle(null)
+  }
+
+  const handleBackToHome = () => {
+    setViewMode('normal')
+    setShareData(null)
+    window.history.pushState({}, '', window.location.pathname)
+  }
+
+  // If in share view mode, show only the shared article
+  if (viewMode === 'share' && shareData) {
+    return (
+      <ErrorBoundary>
+        <div className="app share-mode">
+          <ShareView shareData={shareData} onBackToHome={handleBackToHome} />
+        </div>
+      </ErrorBoundary>
+    )
+  }
+
   return (
     <ErrorBoundary>
       <div className="app">
@@ -288,6 +329,7 @@ function App() {
           error={error}
           readArticles={readArticles}
           onMarkAsRead={markAsRead}
+          onShare={handleShare}
         />
         {showSettings && (
           <Settings
@@ -305,6 +347,12 @@ function App() {
               setLastRefresh(null)
               setReadArticles(new Set())
             }}
+          />
+        )}
+        {shareArticle && (
+          <ShareModal 
+            article={shareArticle} 
+            onClose={handleCloseShare}
           />
         )}
         <Footer />

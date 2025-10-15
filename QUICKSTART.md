@@ -17,23 +17,18 @@ npm run dev
 
 Open http://localhost:3000 in your browser. Done! 🎉
 
-## ☁️ Deploy to AWS (10 minutes)
+## ☁️ Deploy to Production
 
-### Prerequisites
-- AWS CLI installed and configured
-- AWS account with S3 access
-
-### Deploy
+### Build for Deployment
 
 ```bash
-# 1. Update CloudFront ID in deploy-to-s3.sh (optional)
-# Edit line 9: CLOUDFRONT_DISTRIBUTION_ID="your-id-here"
+# 1. Build the project
+npm run build
 
-# 2. Run deployment
-./deploy-to-s3.sh
+# 2. Deploy the dist/ folder to your hosting provider
 ```
 
-That's it! Your site will be live at https://www.humanriskintel.com 🌐
+The app can be deployed to any static hosting service (AWS S3, Netlify, Vercel, etc.) 🌐
 
 ## 🔧 Configuration
 
@@ -83,9 +78,9 @@ aws s3 ls s3://www.humanriskintel.com/
 ## 📚 Next Steps
 
 - Read [README.md](README.md) for full documentation
-- See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment guide
 - Customize topics in `src/components/NewsFilter.jsx`
 - Modify styles in `src/App.css`
+- Configure your API endpoint in Settings
 
 ## 💡 Tips
 
@@ -96,9 +91,9 @@ aws s3 ls s3://www.humanriskintel.com/
 
 ## 📞 Need Help?
 
-- Check [DEPLOYMENT.md](DEPLOYMENT.md) troubleshooting section
 - Review browser console for errors
-- Verify AWS CloudWatch logs
+- Check API endpoint configuration in Settings
+- Verify your backend API is accessible
 - Test API endpoint separately
 
 ---
