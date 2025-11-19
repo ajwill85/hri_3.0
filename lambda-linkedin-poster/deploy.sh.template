@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# Lambda Deployment Script - HRI LinkedIn Poster
+# Deploys the LinkedIn auto-poster Lambda function
+
+set -e  # Exit on error
+
+# Configuration
+FUNCTION_NAME="hri-linkedin-poster"
+AWS_REGION="us-east-2"
+RUNTIME="nodejs24.x"
+
+echo "�� Deploying Lambda: $FUNCTION_NAME"
+echo "================================="
+
+# Check if AWS CLI is installed
+if ! command -v aws &> /dev/null; then
+    echo "❌ Error: AWS CLI is not installed"
+    exit 1
+fi
+
+# Install dependencies
+echo "📦 Installing dependencies..."
+npm install --production
+
+# Create deployment package
+echo "📦 Creating deployment package..."
+rm -f function.zip
+zip -r function.zip index.js node_modules/ -x "*.git*" -x "*test*"
+
+# Get current function info
+if aws lambda get-function --function-name $FUNCTION_NAME --region $AWS_REGION &> /dev/null; then
+    echo "📤 Updating existing function..."
+    
+    # Update function code
+    aws lambda update-function-code \
+        --function-name $FUNCTION_NAME \
+        --zip-file fileb://function.zip \
+        --region $AWS_REGION \
+        --no-cli-pager
+    
+    # Update runtime if needed
+    aws lambda update-function-configuration \
+        --function-name $FUNCTION_NAME \
+        --runtime $RUNTIME \
+        --region $AWS_REGION \
+        --no-cli-pager
+    
+    echo "✅ Function updated successfully"
+else
+    echo "❌ Error: Function '$FUNCTION_NAME' not found"
+    echo "Please create it first following SETUP.md"
+    exit 1
+fi
+
+# Clean up
+echo "🧹 Cleaning up..."
+rm -f function.zip
+
+echo "================================="
+echo "✨ Deployment complete!"
+echo "Function: $FUNCTION_NAME"
+echo "Region: $AWS_REGION"
+echo "Runtime: $RUNTIME"

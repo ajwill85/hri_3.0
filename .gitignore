@@ -36,11 +36,28 @@ dist-ssr
 *.pfx
 .aws/
 aws-exports.js
+deploy-to-s3.sh
+cloudformation-template.yaml
+DEPLOYMENT.md
+DEPLOY_LAMBDA.md
+DEPLOYMENT_CHECKLIST.md
+
+# Deployment scripts with real credentials (use .template versions)
+deploy-frontend.sh
+lambda-function/deploy.sh
+lambda-linkedin-poster/deploy.sh
+
+# Lambda function artifacts
+lambda-function/function.zip
+lambda-linkedin-poster/function.zip
+lambda-function/.vscode/
+lambda-linkedin-poster/.vscode/
 
 # macOS
 .DS_Store
 .AppleDouble
 .LSOverride
+._*
 
 # Temporary files
 *.tmp

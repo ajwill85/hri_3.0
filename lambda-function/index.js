@@ -1,6 +1,6 @@
-// Lambda Function: Human Risk Intelligence News Aggregator v2.1
-// Deploy this to AWS Lambda with Node.js 18.x runtime
-// Version: 2.1.0 - Added Phase 1 Sources (The Record, Ars Technica, Wired)
+// Lambda Function: Human Risk Intelligence News Aggregator v2.2
+// Deploy this to AWS Lambda with Node.js 24.x runtime
+// Version: 2.2.0 - Updated to Node.js 24.x LTS
 
 const https = require('https');
 const Parser = require('rss-parser');
@@ -248,7 +248,7 @@ exports.handler = async (event) => {
                 },
                 executionTime,
                 timestamp: new Date().toISOString(),
-                version: '2.1.0'
+                version: '2.2.0'
             })
         };
         
@@ -263,7 +263,7 @@ exports.handler = async (event) => {
                 error: 'Failed to fetch news articles',
                 message: error.message,
                 timestamp: new Date().toISOString(),
-                version: '2.1.0'
+                version: '2.2.0'
             })
         };
     }

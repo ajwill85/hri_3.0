@@ -1,0 +1,17 @@
+{
+  "name": "hri-linkedin-poster",
+  "version": "1.0.0",
+  "description": "Automated LinkedIn posting for Human Risk Intelligence articles",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.705.0"
+  },
+  "author": "Human Risk Intelligence",
+  "license": "ISC"
+}
