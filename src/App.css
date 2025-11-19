@@ -846,11 +846,18 @@
 
 .article-title a {
   color: var(--text-primary);
-  transition: color var(--transition-base);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  position: relative;
 }
 
 .article-title a:hover {
   color: var(--primary);
+  text-decoration: underline;
+}
+
+.article-title a:active {
+  color: var(--primary-dark);
 }
 
 .article-description {
@@ -893,10 +900,18 @@
   font-size: 0.875rem;
   font-weight: 600;
   white-space: nowrap;
+  cursor: pointer;
+  transition: all var(--transition-base);
 }
 
 .read-more:hover {
   gap: 8px;
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.read-more:active {
+  transform: scale(0.98);
 }
 
 .no-articles {
@@ -1276,6 +1291,17 @@
 .footer-section li {
   margin-bottom: var(--spacing-xs);
   font-size: 0.875rem;
+}
+
+.footer-section li a {
+  color: var(--text-secondary);
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.footer-section li a:hover {
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 .social-links {

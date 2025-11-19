@@ -173,11 +173,16 @@ p {
 a {
   color: var(--primary);
   text-decoration: none;
-  transition: color var(--transition-base);
+  transition: all var(--transition-base);
+  cursor: pointer;
 }
 
 a:hover {
   color: var(--primary-dark);
+}
+
+a:active {
+  opacity: 0.8;
 }
 
 /* Buttons */

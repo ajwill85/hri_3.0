@@ -145,10 +145,11 @@ function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead, onShar
           <>
             <div className="articles-grid">
               {articles.slice(0, visibleArticles).map((article, index) => {
-                const isRead = readArticles.has(article.link)
+                const articleLink = article.link || article.url
+                const isRead = readArticles.has(articleLink)
                 return (
                   <article 
-                    key={`${article.link}-${index}`} 
+                    key={`${articleLink}-${index}`} 
                     className={`article-card ${isRead ? 'read' : ''}`}
                     style={{ animationDelay: `${(index % 20) * 0.05}s` }}
                   >
@@ -173,14 +174,18 @@ function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead, onShar
                     </div>
 
                     <h3 className="article-title">
-                      <a 
-                        href={article.link} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        onClick={() => handleArticleClick(article.link)}
-                      >
-                        {article.title}
-                      </a>
+                      {articleLink ? (
+                        <a 
+                          href={articleLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          onClick={() => handleArticleClick(articleLink)}
+                        >
+                          {article.title}
+                        </a>
+                      ) : (
+                        <span>{article.title}</span>
+                      )}
                     </h3>
 
                   {article.description && (
@@ -213,16 +218,22 @@ function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead, onShar
                         }
                       </div>
                     )}
-                    <a 
-                      href={article.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="read-more"
-                      onClick={() => handleArticleClick(article.link)}
-                    >
-                      Read More
-                      <ExternalLink size={14} />
-                    </a>
+                    {articleLink ? (
+                      <a 
+                        href={articleLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="read-more"
+                        onClick={() => handleArticleClick(articleLink)}
+                      >
+                        Read More
+                        <ExternalLink size={14} />
+                      </a>
+                    ) : (
+                      <span className="read-more" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+                        Link Unavailable
+                      </span>
+                    )}
                   </div>
                 </article>
                 )

@@ -44,7 +44,9 @@ function App() {
     'securityweek', 'therecord', 'arstechnica', 'wired', 'reddit'
   ])
   const [apiEndpoint, setApiEndpoint] = useState(
-    import.meta.env.VITE_API_ENDPOINT || ''
+    localStorage.getItem('hri_api_endpoint') || 
+    import.meta.env.VITE_API_ENDPOINT || 
+    'https://e1suks3vz6.execute-api.us-east-2.amazonaws.com/prod/news'
   )
   const [showSettings, setShowSettings] = useState(false)
   const [lastRefresh, setLastRefresh] = useState(null)

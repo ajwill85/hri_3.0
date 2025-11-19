@@ -8,12 +8,13 @@ function ShareModal({ article, onClose }) {
   useEffect(() => {
     // Create share URL with encoded article data
     const articleData = {
-      title: article.title,
-      description: article.description,
-      source: article.source,
-      url: article.link,
-      pubDate: article.pubDate,
-      categories: article.categories || article.category
+      title: article.title || 'Untitled Article',
+      description: article.description || '',
+      source: article.source || 'Unknown Source',
+      url: article.link || article.url || '',
+      link: article.link || article.url || '',
+      pubDate: article.pubDate || new Date().toISOString(),
+      categories: article.categories || article.category || []
     }
     
     const encodedData = btoa(JSON.stringify(articleData))

@@ -118,15 +118,21 @@ function ShareView({ shareData, onBackToHome }) {
         </div>
 
         <div className="share-view-actions">
-          <a 
-            href={article.url || article.link} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="btn-primary"
-          >
-            <ExternalLink size={18} />
-            Read Full Article
-          </a>
+          {(article.url || article.link) ? (
+            <a 
+              href={article.url || article.link} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="btn-primary"
+            >
+              <ExternalLink size={18} />
+              Read Full Article
+            </a>
+          ) : (
+            <div className="share-view-security-note" style={{ marginBottom: 0 }}>
+              <strong>⚠️ Note:</strong> The original article link is not available in this share. Please browse our news feed to find the full article.
+            </div>
+          )}
           <button className="btn-secondary" onClick={onBackToHome}>
             <Home size={18} />
             Browse More News
