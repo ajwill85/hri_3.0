@@ -4,10 +4,10 @@ A modern, React-based cybersecurity news aggregator that provides real-time inte
 
 ![Version](https://img.shields.io/badge/version-3.0.0-blue)
 ![React](https://img.shields.io/badge/React-18.2.0-61dafb)
-![Vite](https://img.shields.io/badge/Vite-5.0.8-646cff)
+![Vite](https://img.shields.io/badge/Vite-7.3.0-646cff)
 ![AWS](https://img.shields.io/badge/AWS-S3%20%7C%20CloudFront-orange)
 
-## 🚀 Features
+## Features
 
 - **Real-Time News Aggregation** - Fetch live cybersecurity news from multiple sources
 - **Smart Categorization** - Filter by 13 topics including AI Security, Cloud Security, Privacy, and more
@@ -19,14 +19,14 @@ A modern, React-based cybersecurity news aggregator that provides real-time inte
 - **Dark Theme** - Easy on the eyes with a professional dark interface
 - **Smooth Animations** - Polished user experience with CSS animations
 
-## 📋 Prerequisites
+## Prerequisites
 
-- Node.js 18.x or higher
+- Node.js 24.x or higher
 - npm or yarn
 - AWS CLI (for deployment)
 - AWS Account with appropriate permissions
 
-## 🛠️ Installation
+## Installation
 
 1. **Clone or navigate to the repository:**
    ```bash
@@ -44,7 +44,7 @@ A modern, React-based cybersecurity news aggregator that provides real-time inte
    ```
    Edit `.env` to customize your API endpoint if needed.
 
-## 💻 Development
+## Development
 
 Start the development server:
 
@@ -61,7 +61,7 @@ The app will be available at `http://localhost:3000`
 - `npm run preview` - Preview production build locally
 - `npm run lint` - Run ESLint
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 hri_3.0/
@@ -85,7 +85,7 @@ hri_3.0/
 └── README.md                   # This file
 ```
 
-## 🎨 Customization
+## Customization
 
 ### Changing the API Endpoint
 
@@ -135,7 +135,7 @@ const topics = [
 - **Component styles:** `src/App.css`
 - **Color scheme:** CSS variables in `:root` selector
 
-## 🚀 Deployment
+## Deployment
 
 ### Build for Production
 
@@ -153,7 +153,7 @@ The app can be deployed to any static hosting service such as:
 - GitHub Pages
 - Any other static hosting provider
 
-## 🔧 Infrastructure
+## Infrastructure
 
 The application is a static React web app that can be hosted on any static hosting service. It connects to a backend API for news aggregation.
 
@@ -164,7 +164,7 @@ The application is a static React web app that can be hosted on any static hosti
 - **API Gateway** - Backend API endpoint
 - **Lambda** - News aggregation function
 
-## 🔌 Backend API
+## Backend API
 
 The app connects to a backend API that aggregates news from multiple sources. Configure your API endpoint in the Settings panel or via the `VITE_API_ENDPOINT` environment variable.
 
@@ -177,14 +177,14 @@ The app connects to a backend API that aggregates news from multiple sources. Co
 - Reddit r/netsec
 - Hacker News (YCombinator)
 
-## 📱 Browser Support
+## Browser Support
 
 - Chrome (latest)
 - Firefox (latest)
 - Safari (latest)
 - Edge (latest)
 
-## 🔒 Privacy & Security
+## Privacy & Security
 
 - All preferences stored locally in browser
 - No personal data collected
@@ -192,7 +192,7 @@ The app connects to a backend API that aggregates news from multiple sources. Co
 - HTTPS enforced via CloudFront
 - CORS properly configured
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Build Issues
 
@@ -215,7 +215,7 @@ npm install
 - Ensure the build completed successfully
 - Check that all environment variables are set correctly
 
-## 📝 Version History
+## Version History
 
 ### v3.0.0 (Current)
 - Complete rewrite using React + Vite
@@ -230,15 +230,15 @@ npm install
 - Basic news aggregation
 - Manual API configuration
 
-## 🤝 Contributing
+## Contributing
 
 This is a personal project, but suggestions and feedback are welcome!
 
-## 📄 License
+## License
 
 © 2025 Human Risk Intelligence. All rights reserved.
 
-## 👤 Author
+## Author
 
 **Akeem Williams**
 - Portfolio: [ajwill.ai](https://ajwill.ai)
@@ -246,13 +246,13 @@ This is a personal project, but suggestions and feedback are welcome!
 - GitHub: [ajwill85](https://github.com/ajwill85)
 - Email: ajwilliams85@gmail.com
 
-## 🔗 Links
+## Links
 
 - **Live Site:** [www.humanriskintel.com](https://www.humanriskintel.com)
 - **Newsletter:** [Human Risk Intel Newsletter](https://humanriskintel.beehiiv.com)
 - **Portfolio:** [ajwill.ai](https://ajwill.ai)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built with [React](https://react.dev/)
 - Powered by [Vite](https://vitejs.dev/)
