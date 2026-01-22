@@ -1,0 +1,12 @@
+{
+    "name": "hri-url-shortener",
+    "version": "1.0.0",
+    "description": "URL shortening service for HRI article sharing",
+    "main": "index.js",
+    "scripts": {
+        "test": "node test.js"
+    },
+    "dependencies": {
+        "@aws-sdk/client-dynamodb": "^3.705.0"
+    }
+}

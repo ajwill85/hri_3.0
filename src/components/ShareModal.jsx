@@ -1,12 +1,21 @@
 import { useState, useEffect } from 'react'
 import { X, Copy, Check, Linkedin, Twitter, Mail, Share2 } from 'lucide-react'
 
-function ShareModal({ article, onClose }) {
+function ShareModal({ article, onClose, shortenerApiEndpoint }) {
   const [copied, setCopied] = useState(false)
   const [shareUrl, setShareUrl] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    // Create share URL with encoded article data
+    createShortLink()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [article])
+
+  const createShortLink = async () => {
+    setLoading(true)
+    setError(null)
+
     const articleData = {
       title: article.title || 'Untitled Article',
       description: article.description || '',
@@ -16,12 +25,42 @@ function ShareModal({ article, onClose }) {
       pubDate: article.pubDate || new Date().toISOString(),
       categories: article.categories || article.category || []
     }
-    
-    const encodedData = btoa(JSON.stringify(articleData))
+
     const baseUrl = window.location.origin
+
+    // Try to create short link via API
+    if (shortenerApiEndpoint) {
+      try {
+        const response = await fetch(shortenerApiEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(articleData)
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          if (data.success && data.shortCode) {
+            setShareUrl(`${baseUrl}/s/${data.shortCode}`)
+            setLoading(false)
+            return
+          }
+        }
+
+        console.warn('Short link API failed, falling back to base64')
+      } catch (err) {
+        console.error('Error creating short link:', err)
+        setError('Failed to create short link, using fallback')
+      }
+    }
+
+    // Fallback to base64 encoding
+    const encodedData = btoa(JSON.stringify(articleData))
     const url = `${baseUrl}?share=${encodedData}`
     setShareUrl(url)
-  }, [article])
+    setLoading(false)
+  }
 
   const copyToClipboard = async () => {
     try {
@@ -90,21 +129,31 @@ function ShareModal({ article, onClose }) {
 
           <div className="share-url-section">
             <label>Share Link</label>
-            <div className="share-url-input">
-              <input 
-                type="text" 
-                value={shareUrl} 
-                readOnly 
-                onClick={(e) => e.target.select()}
-              />
-              <button 
-                className={`copy-button ${copied ? 'copied' : ''}`}
-                onClick={copyToClipboard}
-              >
-                {copied ? <Check size={16} /> : <Copy size={16} />}
-                {copied ? 'Copied!' : 'Copy'}
-              </button>
-            </div>
+            {loading ? (
+              <div className="share-url-loading">
+                <p>Generating short link...</p>
+              </div>
+            ) : (
+              <>
+                <div className="share-url-input">
+                  <input
+                    type="text"
+                    value={shareUrl}
+                    readOnly
+                    onClick={(e) => e.target.select()}
+                  />
+                  <button
+                    className={`copy-button ${copied ? 'copied' : ''}`}
+                    onClick={copyToClipboard}
+                    disabled={loading}
+                  >
+                    {copied ? <Check size={16} /> : <Copy size={16} />}
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
+                {error && <p className="share-error">{error}</p>}
+              </>
+            )}
           </div>
 
           <div className="share-options">
@@ -114,12 +163,12 @@ function ShareModal({ article, onClose }) {
                 <Linkedin size={20} />
                 <span>LinkedIn</span>
               </button>
-              
+
               <button className="share-option-button twitter" onClick={shareToTwitter}>
                 <Twitter size={20} />
                 <span>Twitter</span>
               </button>
-              
+
               <button className="share-option-button email" onClick={shareViaEmail}>
                 <Mail size={20} />
                 <span>Email</span>

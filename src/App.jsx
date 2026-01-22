@@ -14,7 +14,7 @@ import './App.css'
 
 // Topic keywords for enhanced filtering
 const TOPIC_KEYWORDS = {
-  'ai': ['ai', 'artificial intelligence', 'machine learning', 'chatgpt', 'llm'],
+  'ai': ['ai', 'artificial intelligence', 'machine learning', 'chatgpt', 'llm', 'claude'],
   'cloud': ['cloud', 'aws', 'azure', 'gcp', 'saas'],
   'ransomware': ['ransomware', 'ransom', 'encryption', 'lockbit', 'blackcat'],
   'breach': ['breach', 'leak', 'exposed', 'stolen data', 'compromised'],
@@ -40,13 +40,17 @@ function App() {
   const [sortBy, setSortBy] = useState('date-desc')
   const [readArticles, setReadArticles] = useState(new Set())
   const [enabledSources, setEnabledSources] = useState([
-    'krebsonsecurity', 'bleepingcomputer', 'darkreading', 'thehackernews', 
+    'krebsonsecurity', 'bleepingcomputer', 'darkreading', 'thehackernews',
     'securityweek', 'therecord', 'arstechnica', 'wired', 'reddit'
   ])
   const [apiEndpoint, setApiEndpoint] = useState(
-    localStorage.getItem('hri_api_endpoint') || 
-    import.meta.env.VITE_API_ENDPOINT || 
+    localStorage.getItem('hri_api_endpoint') ||
+    import.meta.env.VITE_API_ENDPOINT ||
     'https://e1suks3vz6.execute-api.us-east-2.amazonaws.com/prod/news'
+  )
+  const [shortenerApiEndpoint] = useState(
+    import.meta.env.VITE_SHORTENER_API_ENDPOINT ||
+    'https://e1suks3vz6.execute-api.us-east-2.amazonaws.com/prod/share'
   )
   const [showSettings, setShowSettings] = useState(false)
   const [lastRefresh, setLastRefresh] = useState(null)
@@ -54,16 +58,53 @@ function App() {
   const [shareData, setShareData] = useState(null)
   const [viewMode, setViewMode] = useState('normal') // 'normal' or 'share'
 
-  // Check for share parameter in URL
+  // Check for share parameter or short link in URL
   useEffect(() => {
+    // Check for short link format: /s/{shortCode}
+    const path = window.location.pathname
+    if (path.startsWith('/s/')) {
+      const shortCode = path.substring(3)
+      fetchShortLink(shortCode)
+      return
+    }
+
+    // Check for old base64 format: ?share={base64}
     const urlParams = new URLSearchParams(window.location.search)
     const shareParam = urlParams.get('share')
-    
+
     if (shareParam) {
       setShareData(shareParam)
       setViewMode('share')
     }
   }, [])
+
+  // Fetch article data from short link
+  const fetchShortLink = async (shortCode) => {
+    try {
+      const response = await fetch(`${shortenerApiEndpoint}/${shortCode}`)
+
+      if (!response.ok) {
+        console.error('Failed to fetch short link:', response.status)
+        setViewMode('normal')
+        return
+      }
+
+      const data = await response.json()
+
+      if (data.success && data.articleData) {
+        // Convert article data to base64 format for ShareView compatibility
+        const encoded = btoa(JSON.stringify(data.articleData))
+        setShareData(encoded)
+        setViewMode('share')
+      } else {
+        console.error('Invalid short link response:', data)
+        setViewMode('normal')
+      }
+    } catch (error) {
+      console.error('Error fetching short link:', error)
+      setViewMode('normal')
+    }
+  }
 
   // Load cached data and preferences
   useEffect(() => {
@@ -136,10 +177,10 @@ function App() {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       const data = await response.json()
-      
+
       const newsArticles = Array.isArray(data) ? data : data.articles || []
       setArticles(newsArticles)
-      
+
       // Cache the results
       localStorage.setItem('hri_articles', JSON.stringify(newsArticles))
       const now = new Date()
@@ -208,7 +249,7 @@ function App() {
     if (enabledSources.length < 9) {
       result = result.filter(article => {
         const source = (article.source || '').toLowerCase()
-        
+
         // Check if source matches any enabled source pattern
         for (const sourceId of enabledSources) {
           const patterns = sourcePatterns[sourceId] || [sourceId]
@@ -216,7 +257,7 @@ function App() {
             return true
           }
         }
-        
+
         return false
       })
     }
@@ -234,11 +275,11 @@ function App() {
           ...(Array.isArray(article.tags) ? article.tags : []),
           article.topic || '',
         ].join(' ').toLowerCase()
-        
+
         // Check if any selected topic's keywords match the article content
         return selectedTopics.some(topicId => {
           const keywords = TOPIC_KEYWORDS[topicId] || [topicId]
-          return keywords.some(keyword => 
+          return keywords.some(keyword =>
             searchableText.includes(keyword.toLowerCase())
           )
         })
@@ -304,28 +345,28 @@ function App() {
     <ErrorBoundary>
       <div className="app">
         <Header onSettingsClick={() => setShowSettings(true)} />
-        <Hero 
+        <Hero
           articleCount={filteredArticles.length}
           lastRefresh={lastRefresh}
           onRefresh={fetchNews}
           loading={loading}
         />
         <div className="container search-sort-container">
-          <SearchBar 
+          <SearchBar
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
           />
-          <SortBar 
+          <SortBar
             sortBy={sortBy}
             onSortChange={setSortBy}
           />
         </div>
-        <NewsFilter 
+        <NewsFilter
           selectedTopics={selectedTopics}
           onTopicChange={setSelectedTopics}
           totalArticles={articles.length}
         />
-        <NewsFeed 
+        <NewsFeed
           articles={filteredArticles}
           loading={loading}
           error={error}
@@ -352,9 +393,10 @@ function App() {
           />
         )}
         {shareArticle && (
-          <ShareModal 
-            article={shareArticle} 
+          <ShareModal
+            article={shareArticle}
             onClose={handleCloseShare}
+            shortenerApiEndpoint={shortenerApiEndpoint}
           />
         )}
         <Footer />
