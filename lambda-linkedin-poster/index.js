@@ -311,10 +311,7 @@ exports.handler = async (event) => {
     console.error('Error in LinkedIn auto-poster:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ 
-        error: error.message,
-        stack: error.stack 
-      })
+      body: JSON.stringify({ error: 'LinkedIn posting failed' })
     };
   }
 };
