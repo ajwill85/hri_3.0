@@ -41,7 +41,7 @@ function App() {
   const [readArticles, setReadArticles] = useState(new Set())
   const [enabledSources, setEnabledSources] = useState([
     'krebsonsecurity', 'bleepingcomputer', 'darkreading', 'thehackernews',
-    'securityweek', 'therecord', 'arstechnica', 'wired', 'reddit'
+    'securityweek', 'therecord', 'arstechnica', 'wired', 'hackernoon', 'reddit'
   ])
   const [apiEndpoint, setApiEndpoint] = useState(
     localStorage.getItem('hri_api_endpoint') ||
@@ -238,6 +238,7 @@ function App() {
     'therecord': ['the record', 'therecord', 'recorded future'],
     'arstechnica': ['ars technica', 'arstechnica', 'security – ars technica'],
     'wired': ['wired', 'security latest'], // Wired feed title is "Security Latest"
+    'hackernoon': ['hackernoon', 'hacker noon', 'hackernoon - cybersecurity'],
     'reddit': ['reddit', 'netsec', 'r/netsec']
   }
 
@@ -246,7 +247,7 @@ function App() {
     let result = articles
 
     // Filter by enabled sources
-    if (enabledSources.length < 9) {
+    if (enabledSources.length < Object.keys(sourcePatterns).length) {
       result = result.filter(article => {
         const source = (article.source || '').toLowerCase()
 

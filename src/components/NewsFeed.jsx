@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { ExternalLink, Calendar, Tag, AlertCircle, CheckCircle } from 'lucide-react'
 import ArticleSkeletonGrid from './ArticleSkeleton'
 import ShareButton from './ShareButton'
+import { safeExternalUrl } from '../utils/safeUrl'
 
 function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead, onShare }) {
   const [visibleArticles, setVisibleArticles] = useState(20)
@@ -146,6 +147,7 @@ function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead, onShar
             <div className="articles-grid">
               {articles.slice(0, visibleArticles).map((article, index) => {
                 const articleLink = article.link || article.url
+                const safeLink = safeExternalUrl(articleLink)
                 const isRead = readArticles.has(articleLink)
                 return (
                   <article 
@@ -174,10 +176,10 @@ function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead, onShar
                     </div>
 
                     <h3 className="article-title">
-                      {articleLink ? (
-                        <a 
-                          href={articleLink} 
-                          target="_blank" 
+                      {safeLink ? (
+                        <a
+                          href={safeLink}
+                          target="_blank"
                           rel="noopener noreferrer"
                           onClick={() => handleArticleClick(articleLink)}
                         >
@@ -218,10 +220,10 @@ function NewsFeed({ articles, loading, error, readArticles, onMarkAsRead, onShar
                         }
                       </div>
                     )}
-                    {articleLink ? (
-                      <a 
-                        href={articleLink} 
-                        target="_blank" 
+                    {safeLink ? (
+                      <a
+                        href={safeLink}
+                        target="_blank"
                         rel="noopener noreferrer"
                         className="read-more"
                         onClick={() => handleArticleClick(articleLink)}

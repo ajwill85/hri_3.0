@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ExternalLink, Home, Calendar, Tag } from 'lucide-react'
+import { safeExternalUrl } from '../utils/safeUrl'
 
 function ShareView({ shareData, onBackToHome }) {
   const [article, setArticle] = useState(null)
@@ -118,10 +119,10 @@ function ShareView({ shareData, onBackToHome }) {
         </div>
 
         <div className="share-view-actions">
-          {(article.url || article.link) ? (
-            <a 
-              href={article.url || article.link} 
-              target="_blank" 
+          {safeExternalUrl(article.url || article.link) ? (
+            <a
+              href={safeExternalUrl(article.url || article.link)}
+              target="_blank"
               rel="noopener noreferrer"
               className="btn-primary"
             >

@@ -41,9 +41,10 @@ function Settings({ apiEndpoint, onApiEndpointChange, onClose, onClearCache, ena
     { id: 'darkreading', name: 'Dark Reading', type: 'RSS' },
     { id: 'thehackernews', name: 'The Hacker News', type: 'RSS' },
     { id: 'securityweek', name: 'SecurityWeek', type: 'RSS' },
-    { id: 'therecord', name: 'The Record', type: 'RSS', isNew: true },
-    { id: 'arstechnica', name: 'Ars Technica Security', type: 'RSS', isNew: true },
-    { id: 'wired', name: 'Wired Security', type: 'RSS', isNew: true },
+    { id: 'therecord', name: 'The Record', type: 'RSS' },
+    { id: 'arstechnica', name: 'Ars Technica Security', type: 'RSS' },
+    { id: 'wired', name: 'Wired Security', type: 'RSS' },
+    { id: 'hackernoon', name: 'HackerNoon', type: 'RSS', isNew: true },
     { id: 'reddit', name: 'r/netsec', type: 'Reddit' },
   ]
 
@@ -190,7 +191,7 @@ function Settings({ apiEndpoint, onApiEndpointChange, onClose, onClearCache, ena
               <p><strong>Frontend Version:</strong> 3.0.0 + Phase 1</p>
               <p><strong>Lambda Version:</strong> 2.1.0</p>
               <p><strong>Runtime:</strong> React 18 + Vite 5</p>
-              <p><strong>Total Sources:</strong> 9 (8 RSS + 1 Reddit)</p>
+              <p><strong>Total Sources:</strong> 10 (9 RSS + 1 Reddit)</p>
               <p>
                 Human Risk Intelligence provides real-time cybersecurity news 
                 aggregation from trusted sources with enhanced performance and reliability.

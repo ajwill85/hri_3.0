@@ -171,11 +171,15 @@ The app connects to a backend API that aggregates news from multiple sources. Co
 ### News Sources
 
 - Krebs on Security
-- The Hacker News
+- BleepingComputer
 - Dark Reading
-- Threatpost
+- The Hacker News
+- SecurityWeek
+- The Record
+- Ars Technica Security
+- Wired Security
+- HackerNoon Cybersecurity
 - Reddit r/netsec
-- Hacker News (YCombinator)
 
 ## Browser Support
 

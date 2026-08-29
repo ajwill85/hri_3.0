@@ -5,6 +5,14 @@
 const https = require('https');
 const Parser = require('rss-parser');
 
+// Origins allowed to call this API. Override with a comma-separated
+// ALLOWED_ORIGINS env var to add staging or preview hosts.
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ||
+    'https://humanriskintel.com,https://www.humanriskintel.com,http://localhost:3000,http://localhost:4173')
+    .split(',')
+    .map(o => o.trim())
+    .filter(Boolean);
+
 // RSS Feed Sources
 const RSS_FEEDS = {
     // Original sources
@@ -17,7 +25,8 @@ const RSS_FEEDS = {
     // Phase 1 additions
     therecord: 'https://therecord.media/feed/',
     arstechnica: 'https://arstechnica.com/security/feed/',
-    wired: 'https://www.wired.com/feed/category/security/latest/rss'
+    wired: 'https://www.wired.com/feed/category/security/latest/rss',
+    hackernoon: 'https://hackernoon.com/tagged/cybersecurity/feed'
 };
 
 // Topic categorization
@@ -185,11 +194,17 @@ async function fetchRedditPosts() {
 exports.handler = async (event) => {
     console.log('Lambda invoked for real news aggregation');
     
+    const requestOrigin = event.headers?.origin || event.headers?.Origin;
+    const allowedOrigin = ALLOWED_ORIGINS.includes(requestOrigin)
+        ? requestOrigin
+        : ALLOWED_ORIGINS[0];
+
     const corsHeaders = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Requested-With,cache-control,accept,content-type,origin',
-        'Access-Control-Allow-Methods': 'DELETE,GET,HEAD,OPTIONS,PATCH,POST,PUT',
+        'Access-Control-Allow-Origin': allowedOrigin,
+        'Vary': 'Origin',
+        'Access-Control-Allow-Headers': 'Accept,Cache-Control,Content-Type,If-Modified-Since,Origin,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Requested-With',
+        'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS',
         'Access-Control-Max-Age': '86400'
     };
     
@@ -261,7 +276,6 @@ exports.handler = async (event) => {
             body: JSON.stringify({
                 success: false,
                 error: 'Failed to fetch news articles',
-                message: error.message,
                 timestamp: new Date().toISOString(),
                 version: '2.2.0'
             })
