@@ -56,7 +56,7 @@ curl -X POST https://www.linkedin.com/oauth/v2/accessToken \
 ```bash
 # Use your access token to get org ID:
 curl -X GET https://api.linkedin.com/v2/organizationAcls?q=roleAssignee \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+  -H "Authorization: Bearer $LINKEDIN_ACCESS_TOKEN"
 
 # Look for your company page in the response
 # The ID will be in format: urn:li:organization:XXXXXX

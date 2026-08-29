@@ -1,0 +1,12 @@
+# Gitleaks config for Human Risk Intelligence v3.0
+# Run: gitleaks detect --no-banner --source .
+#      gitleaks protect --no-banner --source .
+
+title = "hri_3.0"
+
+# Docs use obvious placeholders (YOUR_*, your_token_here). Allowlist the
+# LinkedIn setup guide so curl-auth-header does not flag those examples.
+# Real tokens must never be committed here — keep them in Lambda env / Secrets Manager.
+[[allowlists]]
+description = "LinkedIn SETUP.md documentation placeholders"
+paths = ['''lambda-linkedin-poster/SETUP\.md''']
