@@ -5,13 +5,26 @@
 const https = require('https');
 const Parser = require('rss-parser');
 
-// Origins allowed to call this API. Override with a comma-separated
-// ALLOWED_ORIGINS env var to add staging or preview hosts.
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS ||
-    'https://humanriskintel.com,https://www.humanriskintel.com,http://localhost:3000,http://localhost:4173')
-    .split(',')
-    .map(o => o.trim())
-    .filter(Boolean);
+// Origins allowed to call this API. The production default is the public
+// site only. Set ALLOWED_ORIGINS to a comma-separated list to replace it
+// (staging or preview hosts). Local development origins are included only
+// when ALLOW_LOCALHOST=true and ALLOWED_ORIGINS is not set.
+const PRODUCTION_ORIGINS = 'https://humanriskintel.com,https://www.humanriskintel.com';
+const LOCAL_ORIGINS = 'http://localhost:3000,http://localhost:4173';
+
+function parseOriginList(value) {
+    return String(value)
+        .split(',')
+        .map(origin => origin.trim())
+        .filter(Boolean);
+}
+
+const allowLocalhost = /^(1|true|yes)$/i.test(String(process.env.ALLOW_LOCALHOST || '').trim());
+const defaultOrigins = allowLocalhost
+    ? `${PRODUCTION_ORIGINS},${LOCAL_ORIGINS}`
+    : PRODUCTION_ORIGINS;
+
+const ALLOWED_ORIGINS = parseOriginList(process.env.ALLOWED_ORIGINS || defaultOrigins);
 
 // RSS Feed Sources
 const RSS_FEEDS = {
