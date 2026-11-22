@@ -10,7 +10,7 @@
     "node": ">=24.0.0"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.705.0"
+    "@aws-sdk/client-dynamodb": "^3.1172.0"
   },
   "author": "Human Risk Intelligence",
   "license": "ISC"
