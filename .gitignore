@@ -56,7 +56,6 @@ lambda-linkedin-poster/.vscode/
 # Lambda URL Shortener artifacts
 lambda-url-shortener/function.zip
 lambda-url-shortener/node_modules/
-lambda-url-shortener/package-lock.json
 lambda-url-shortener/deploy.sh
 
 # macOS

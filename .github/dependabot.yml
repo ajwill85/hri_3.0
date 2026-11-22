@@ -1,0 +1,26 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: npm
+    directory: "/lambda-function"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: npm
+    directory: "/lambda-linkedin-poster"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: npm
+    directory: "/lambda-url-shortener"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
