@@ -153,6 +153,8 @@ Retrieve article data by short code.
 - `TABLE_NAME` - DynamoDB table name (default: `hri-short-links`)
 - `AWS_REGION` - AWS region (default: `us-east-2`)
 - `BASE_URL` - Base URL for short links (default: `https://humanriskintel.com`)
+- `ALLOWED_ORIGINS` - Comma-separated browser origins allowed to call the API. Defaults to the production site hosts.
+- `ALLOW_LOCALHOST` - Set to `true` to include local development origins when `ALLOWED_ORIGINS` is not set.
 
 ## DynamoDB Schema
 
